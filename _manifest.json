@@ -1,0 +1,41 @@
+{
+  "manifest_version": 2,
+  "id": "feishu-agent-tools",
+  "version": "1.0.0",
+  "name": "飞书 Agent 工具",
+  "description": "把飞书知识库、文档、日历、消息、审批、多维表格等能力注册为 AI 工具，仅在飞书聊天中可用。",
+  "author": {
+    "name": "MaiBot 社区",
+    "url": "https://github.com/Mai-with-u/MaiBot"
+  },
+  "license": "AGPL-3.0",
+  "plugin_type": "adapter",
+  "urls": {
+    "repository": "https://github.com/Mai-with-u/plugin-repo",
+    "homepage": "https://github.com/Mai-with-u/plugin-repo",
+    "documentation": "https://github.com/Mai-with-u/plugin-repo",
+    "issues": "https://github.com/Mai-with-u/plugin-repo/issues"
+  },
+  "host_application": {
+    "min_version": "1.0.6",
+    "max_version": "1.99.99"
+  },
+  "sdk": {
+    "min_version": "2.7.0",
+    "max_version": "2.99.99"
+  },
+  "dependencies": [
+    {
+      "type": "python_package",
+      "name": "lark-oapi",
+      "version_spec": ">=1.7.0,<2.0.0"
+    }
+  ],
+  "capabilities": [
+    "config.get"
+  ],
+  "i18n": {
+    "default_locale": "zh-CN",
+    "supported_locales": ["zh-CN"]
+  }
+}

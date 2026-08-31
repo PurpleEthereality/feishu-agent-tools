@@ -1,0 +1,28 @@
+[project]
+name = "feishu-agent-tools"
+version = "1.0.0"
+description = "MaiBot Feishu agent tools: wiki/docx/calendar/message/approval/bitable as AI tools"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "lark-oapi>=1.7.0,<2.0.0",
+    "maibot-plugin-sdk>=2.7.0,<3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.15.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+include = ["*.py", "core/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint]
+select = ["B", "E", "F"]
+ignore = ["E501"]
