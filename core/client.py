@@ -155,7 +155,10 @@ class FeishuAgentClientMixin:
 
         client = await self._ensure_client(settings)
         request = DeleteMessageRequest.builder().message_id(message_id).build()
-        self._ensure_success(await client.im.v1.message.adelete(request), "撤回消息")
+        response = await client.im.v1.message.adelete(request)
+        # 撤回接口响应不含 data 字段，仅校验业务码。
+        if not response.success():
+            raise _FeishuAPIError(f"撤回消息失败: code={response.code} msg={response.msg}")
         return True
 
     # ---- 日历 ----
