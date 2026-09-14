@@ -30,7 +30,8 @@
 
 ## 配置
 
-在 `config.toml` 填写应用凭据（与飞书适配器同一应用即可）：
+复制 `config.toml.example` 为同目录下的 `config.toml`，或在 WebUI 插件配置页填写应用凭据
+（与飞书适配器同一应用即可）：
 
 ```toml
 [credentials]
@@ -39,6 +40,23 @@ app_secret = "xxx"
 region = "feishu"
 ```
 
+> ⚠️ `config.toml` 含 App Secret，已被 `.gitignore` 忽略，请不要提交到仓库。
+
 ## 仅飞书可用（运行期守卫）
 
-所有工具 handler 会读取调用上下文中的 `platform`，非 `feishu` 时返回错误提示，不执行任何飞书 API 调用。
+所有工具 handler 会读取调用上下文中的 `platform`，只有 `feishu` 才放行。
+**拿不到平台信息时按「非飞书」处理（fail-closed）**，避免上下文缺失时绕过守卫直接调用飞书 API。
+被拦截时返回「该工具仅飞书聊天可用」。
+
+## 已知限制
+
+- 列表类工具（知识库节点、日历日程、审批实例、多维表格记录）目前**只取首页**，
+  暂不跟随 `page_token` 翻页；返回条数由参数控制并已做范围夹取。
+- 本插件的 `plugin_type` 是 `extension`：它只注册 AI 工具，不是平台适配器。
+
+## 开发
+
+```bash
+python -m pytest tests/ -q
+ruff check core/ plugin.py tests/
+```

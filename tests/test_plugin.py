@@ -36,12 +36,13 @@ def _make_plugin() -> FeishuAgentToolsPlugin:
 
 
 def test_platform_guard() -> None:
-    """平台守卫：飞书放行，其它平台拦截。"""
+    """平台守卫：飞书放行，其它平台与缺失平台都拦截。"""
 
     plugin = _make_plugin()
     assert plugin._guard({"platform": "feishu"}) is None
-    assert plugin._guard({}) is None
     assert "仅飞书" in (plugin._guard({"platform": "qq"}) or "")
+    # 拿不到平台时必须 fail-closed，否则守卫可被绕过
+    assert "仅飞书" in (plugin._guard({}) or "")
 
 
 def test_tool_blocked_outside_feishu() -> None:

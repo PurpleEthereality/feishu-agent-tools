@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from lark_oapi import Client as LarkClient
 from lark_oapi.core.const import FEISHU_DOMAIN, LARK_DOMAIN
@@ -20,13 +20,18 @@ class FeishuAgentClientMixin:
     """为 Agent 工具提供飞书各功能 API 调用能力。"""
 
     _client: Optional[LarkClient] = None
-    _client_domain: str = ""
+    _client_key: Optional[Tuple[str, str, str]] = None
 
     async def _ensure_client(self, settings: FeishuAgentToolsSettings) -> LarkClient:
-        """按区域构造并缓存飞书 Client。"""
+        """按区域与凭据构造并缓存飞书 Client。
+
+        缓存键包含 app_id / app_secret：只按区域缓存的话，用户改了密钥后
+        工具仍会继续用旧凭据，直到进程重启。
+        """
 
         domain = LARK_DOMAIN if settings.credentials.region == "lark" else FEISHU_DOMAIN
-        if self._client is None or self._client_domain != domain:
+        cache_key = (domain, settings.credentials.app_id, settings.credentials.app_secret)
+        if self._client is None or self._client_key != cache_key:
             self._client = (
                 LarkClient.builder()
                 .app_id(settings.credentials.app_id)
@@ -35,7 +40,7 @@ class FeishuAgentClientMixin:
                 .log_level(LogLevel.WARNING)
                 .build()
             )
-            self._client_domain = domain
+            self._client_key = cache_key
         return self._client
 
     @staticmethod
@@ -85,10 +90,13 @@ class FeishuAgentClientMixin:
     ) -> List[Dict[str, Any]]:
         """按关键词搜索知识库节点。"""
 
-        from lark_oapi.api.wiki.v1 import SearchNodeRequest
+        from lark_oapi.api.wiki.v1 import SearchNodeRequest, SearchNodeRequestBody
 
         client = await self._ensure_client(settings)
-        request = SearchNodeRequest.builder().query(query).page_size(count).build()
+        # 搜索关键词要放进 request_body：SearchNodeRequest.builder() 没有 query()，
+        # 之前直接 .query(query) 会抛 AttributeError，导致该工具完全不可用。
+        body = SearchNodeRequestBody.builder().query(query).build()
+        request = SearchNodeRequest.builder().page_size(max(1, min(int(count or 5), 50))).request_body(body).build()
         data = self._ensure_success(await client.wiki.v1.node.asearch(request), "搜索知识库")
         return self._itemize(data)
 

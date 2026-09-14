@@ -45,11 +45,15 @@ class FeishuAgentToolsPlugin(FeishuAgentClientMixin, MaiBotPlugin):
         return cast(FeishuAgentToolsSettings, self.config)
 
     def _guard(self, kwargs: Dict[str, Any]) -> Optional[str]:
-        """运行期守卫：非飞书聊天返回错误提示。"""
+        """运行期守卫：只在飞书聊天中放行。
+
+        拿不到平台上下文时按「非飞书」处理（fail-closed）：否则任何丢失
+        平台信息的调用都能绕过守卫直接打到飞书 API。
+        """
 
         platform = str(kwargs.get("platform") or "").strip()
-        if platform and platform != TARGET_PLATFORM:
-            return f"该工具仅飞书聊天可用，当前平台为 {platform}"
+        if platform != TARGET_PLATFORM:
+            return f"该工具仅飞书聊天可用，当前平台为 {platform or '未知'}"
         return None
 
     def _fail(self, error: str) -> Dict[str, Any]:
@@ -278,7 +282,9 @@ class FeishuAgentToolsPlugin(FeishuAgentClientMixin, MaiBotPlugin):
             return self._fail("缺少 app_token 或 table_id")
         settings = self._load_settings()
         try:
-            items = await self.bitable_list_records(settings, app_token, table_id, page_size=int(page_size or 50))
+            items = await self.bitable_list_records(
+                settings, app_token, table_id, page_size=max(1, min(int(page_size or 50), 500))
+            )
         except Exception as exc:  # noqa: BLE001
             return self._fail(f"{type(exc).__name__}: {exc}")
         return _tool_result(items=[self._serializable(item) for item in items])
