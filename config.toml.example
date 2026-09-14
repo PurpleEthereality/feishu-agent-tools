@@ -1,0 +1,15 @@
+# 飞书 Agent 工具插件配置模板
+#
+# 用法：复制成同目录下的 config.toml 再填写，或在 MaiBot WebUI 的插件配置页填写。
+# config.toml 含飞书 App Secret，已被 .gitignore 忽略，请勿提交到仓库。
+
+[plugin]
+enabled = false
+config_version = "1.0.0"
+
+[credentials]
+# 与飞书适配器使用同一个自建应用即可
+app_id = ""
+app_secret = ""
+# feishu = 中国大陆；lark = 国际版
+region = "feishu"

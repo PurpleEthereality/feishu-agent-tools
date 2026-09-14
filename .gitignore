@@ -1,6 +1,18 @@
+# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
+.venv/
+
+# 测试与检查缓存
 .pytest_cache/
 .ruff_cache/
-.venv/
+.mypy_cache/
+
+# 本地实际配置：含飞书 App Secret，绝不提交（只跟踪 config.toml.example）
+config.toml
+config_back/
+
+# 运行期产物
+*.log
+data/
