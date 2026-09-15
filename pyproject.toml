@@ -1,6 +1,6 @@
 [project]
 name = "feishu-agent-tools"
-version = "1.0.0"
+version = "1.0.2"
 description = "MaiBot Feishu agent tools: wiki/docx/calendar/message/approval/bitable as AI tools"
 readme = "README.md"
 requires-python = ">=3.11"

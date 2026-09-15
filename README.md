@@ -52,7 +52,15 @@ region = "feishu"
 
 - 列表类工具（知识库节点、日历日程、审批实例、多维表格记录）目前**只取首页**，
   暂不跟随 `page_token` 翻页；返回条数由参数控制并已做范围夹取。
-- 本插件的 `plugin_type` 是 `extension`：它只注册 AI 工具，不是平台适配器。
+- 本插件的 `plugin_type` 是 `tool`：它只注册 AI 工具，不是平台适配器。
+
+## 故障排查
+
+- **工具在飞书里不生效**：确认当前聊天平台是飞书；工具带运行期守卫，非飞书平台会返回「该工具仅飞书聊天可用」。
+- **工具在飞书里也不生效**：本插件的工具默认进入 deferred 工具池，需要 LLM 通过 `tool_search` 发现后才会出现在可用工具里。
+- **调用返回 `Access denied ... scopes is required`**：应用缺少对应权限。按上方「权限要求」开通并**发布版本**；知识库/多维表格还要把应用加入资源成员。
+- **返回 `field validation failed`**：参数取值不合法（例如 document_id / app_token 传了假值）。
+- **改了 App Secret 不生效**：确认已重启插件；`Client` 缓存已按 `app_id`/`app_secret` 作为缓存键。
 
 ## 开发
 

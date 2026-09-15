@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "id": "feishu-agent-tools",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "飞书 Agent 工具",
   "description": "把飞书知识库、文档、日历、消息、审批、多维表格等能力注册为 AI 工具，仅在飞书聊天中可用。",
   "author": {
@@ -9,7 +9,15 @@
     "url": "https://github.com/Mai-with-u/MaiBot"
   },
   "license": "AGPL-3.0",
-  "plugin_type": "extension",
+  "plugin_type": "tool",
+  "display": {
+    "icon": {
+      "type": "lucide",
+      "value": "globe",
+      "fallback": "wrench",
+      "background": "#eaf6ff"
+    }
+  },
   "urls": {
     "repository": "https://github.com/zisekongling/feishu-agent-tools",
     "homepage": "https://github.com/zisekongling/feishu-agent-tools",

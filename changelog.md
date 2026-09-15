@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.2] - 2026-09-15
+
+### 细节
+- 按官方插件文档规范重写全部 10 个 `@Tool` 声明：
+  - `description` 改为 `brief_description`（一句话说明）+ `detailed_description`（使用时机、约束、副作用）。
+  - 参数由 dict 改为结构化 `ToolParameterInfo` + `ToolParamType`，自动生成完整 JSON Schema；
+    `receive_id_type` 增加枚举约束，`fields` 声明为 `object`。
+- 工具返回值统一为「可读文本 `content` + 结构化 `data`」，错误也返回可读 `content`，
+  让 LLM 更容易理解结果，避免直接吞原始 JSON。
+- 清单 `plugin_type` 由 `extension` 改为 `tool`，并新增 `display.icon` 图标。
+- 补 `LICENSE` 文件，README 补充故障排查说明。
+
 ## [1.0.1] - 2026-09-14
 
 ### 细节
