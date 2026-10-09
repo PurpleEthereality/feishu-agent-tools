@@ -19,10 +19,10 @@
     }
   },
   "urls": {
-    "repository": "https://github.com/zisekongling/feishu-agent-tools",
-    "homepage": "https://github.com/zisekongling/feishu-agent-tools",
-    "documentation": "https://github.com/zisekongling/feishu-agent-tools",
-    "issues": "https://github.com/zisekongling/feishu-agent-tools/issues"
+    "repository": "https://github.com/PurpleEthereality/feishu-agent-tools",
+    "homepage": "https://github.com/PurpleEthereality/feishu-agent-tools",
+    "documentation": "https://github.com/PurpleEthereality/feishu-agent-tools",
+    "issues": "https://github.com/PurpleEthereality/feishu-agent-tools/issues"
   },
   "host_application": {
     "min_version": "1.0.6",
